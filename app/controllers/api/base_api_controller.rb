@@ -13,6 +13,13 @@ class Api::BaseApiController < ApplicationController
   end
   
   
+  def extract_extensible_date(date_string)# 2013-06-30
+    date_array = date_string.split('-').map{|x| x.to_i}
+    
+    date = Date.new( date_array[0], date_array[1], date_array[2])
+    return date.to_datetime
+  end
+  
   def extract_date( date ) 
     if date.nil? or date.length == 0 
       return nil 

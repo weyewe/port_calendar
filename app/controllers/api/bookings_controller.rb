@@ -19,12 +19,18 @@ class Api::BookingsController < Api::BaseApiController
       }.count
     elsif params[:startDate].present? 
       puts "This is the shite\n"*5
+      
+      # 2013-06-30
+      startDate = extract_extensible_date( params[:startDate])
+      endDate = extract_extensible_date( params[:endDate])
+      @objects = Booking.bookings_in_between(startDate, endDate)
+      @total = @objects.count 
     else
       @objects = Booking.active_objects.page(params[:page]).per(params[:limit]).order("id DESC")
       @total = Booking.active_objects.count
     end
     
-    render :json => { :employees => @objects , :total => @total , :success => true }
+    render :json => { :bookings => @objects , :total => @total , :success => true }
   end
 
   def create
