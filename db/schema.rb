@@ -14,6 +14,10 @@
 ActiveRecord::Schema.define(version: 20130726011840) do
 
   create_table "bookings", force: true do |t|
+    t.datetime "start_datetime"
+    t.datetime "end_datetime"
+    t.string   "title"
+    t.string   "calendar_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

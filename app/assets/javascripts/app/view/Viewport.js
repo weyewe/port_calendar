@@ -7,19 +7,6 @@ Ext.define("AM.view.Viewport" , {
 		align : 'stretch'
 	},
 	
-	// initComponent: function(){
-	// 	console.log("inside initComponent");
-	// 	
-		// this.eventStore = Ext.create('Extensible.calendar.data.MemoryEventStore', {
-		// 	        // defined in ../data/Events.js
-		// 	        data: Extensible.calendar.data.Events.getData()
-		// 	    });
-	// 	// 	
-	// 	// console.log("ending initComponent");
-	// 	// console.log(this.eventStore);
-	// 
-	// },
-	// 
 	 
 	items  : [
 		{
