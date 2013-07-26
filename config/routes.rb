@@ -1,0 +1,9 @@
+PortCalendar::Application.routes.draw do
+   root :to => 'home#extjs' , :method => :get 
+   
+   namespace :api do 
+     resources :bookings 
+   end
+end
+
+
