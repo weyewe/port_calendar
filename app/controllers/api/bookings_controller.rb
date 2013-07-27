@@ -45,20 +45,30 @@ class Api::BookingsController < Api::BaseApiController
   end
 
   def create
-    @object = Booking.new(params[:employee])
+    
+    # parse_datetime_from_client
+    
+    params[:booking][:start_datetime] =  parse_datetime_from_client( params[:booking][:start_datetime] )
+    params[:booking][:end_datetime] =  parse_datetime_from_client( params[:booking][:end_datetime] )
+    @object = Booking.create_object(params[:booking])
  
-    if @object.save
+    if @object.errors.size  == 0
       render :json => { :success => true, 
-                        :employees => [@object] , 
+                        :bookings => [
+                            {
+                              :id 						 =>	@object.id,                                               
+                            	:start_datetime  =>	@object.start_datetime.to_datetime.new_offset( Rational(7,24) ) .to_time.iso8601,
+                            	:end_datetime 	 =>	@object.end_datetime.to_datetime.new_offset( Rational(7,24) ) .to_time.iso8601,
+                            	:title 					 =>	@object.title,
+                            	:calendar_id 		 =>	@object.calendar_id
+                            }
+                          ] , 
                         :total => Booking.active_objects.count }  
     else
       msg = {
         :success => false, 
         :message => {
-          :errors => extjs_error_format( @object.errors ) 
-          # :errors => {
-          #   :name => "Nama tidak boleh bombastic"
-          # }
+          :errors => extjs_error_format( @object.errors )  
         }
       }
       
@@ -69,24 +79,38 @@ class Api::BookingsController < Api::BaseApiController
   def show
     @object  = Booking.find params[:id]
     render :json => { :success => true,   
-                      :employee => @object,
+                      :booking => {
+                        :id 						 =>	@object.id,                                               
+                      	:start_datetime  =>	format_datetime(@object.start_datetime),
+                      	:end_datetime 	 =>	format_datetime(@object.end_datetime)  ,
+                      	:title 					 =>	@object.title,
+                      	:calendar_id 		 =>	@object.calendar_id
+                      },
                       :total => Booking.active_objects.count  }
   end
 
   def update
     @object = Booking.find(params[:id])
     
-    if @object.update_attributes(params[:employee])
+    params[:booking][:start_datetime] =  parse_datetime_from_client( params[:booking][:start_datetime] )
+    params[:booking][:end_datetime] =  parse_datetime_from_client( params[:booking][:end_datetime] )
+    
+    
+    if @object.update_object(params[:booking])
       render :json => { :success => true,   
-                        :employees => [@object],
+                        :bookings => [{
+                          :id 						 =>	@object.id,                                               
+                        	:start_datetime  =>	format_datetime(@object.start_datetime),
+                        	:end_datetime 	 =>	format_datetime(@object.end_datetime)  ,
+                        	:title 					 =>	@object.title,
+                        	:calendar_id 		 =>	@object.calendar_id
+                        }],
                         :total => Booking.active_objects.count  } 
     else
       msg = {
         :success => false, 
         :message => {
-          :errors => {
-            :name => "Nama tidak boleh kosong"
-          }
+          :errors => extjs_error_format( @object.errors )  
         }
       }
       

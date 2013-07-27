@@ -82,20 +82,33 @@ Ext.define("AM.controller.Calendars", {
 				'viewchange' : this.alertViewChange,
 				'datechange' : this.alertDateChange,
 				'beforedatechange' : this.alertBeforeDateChange,
-				'eventsrendered' : this.alertAfterEventsRendered
+				'eventsrendered' : this.alertAfterEventsRendered,
+				'dayclick' : this.onDayClick, 
+				'eventclick' : this.onEventClick
 			}
 		});
 		
 		console.log("Init is finished");
 	},
+
+	onDayClick: function(){
+		console.log("On day click");
+	},
+	
+	onEventClick : function(){
+		console.log("on event click");
+	},
+	
 	
 	onEventsStoreLoaded : function(sender){  
 		var me = this;
+		// Ext.getCmp('indicator').setLoading(false);
 		me.getViewport().setLoading(false);
 	},
 	
 	beforeEventsStoreLoaded: function(sender){ 
 		var me = this;
+		// Ext.getCmp('indicator').setLoading(true);
 		me.getViewport().setLoading(true);
 	},
 	 

@@ -4,6 +4,7 @@ Ext.define('AM.view.calendar.Basic', {
     title: 'Basic  Haha Calendar' ,
 		// eventStore: Ext.create('AM.store.Events'), 
 		// calendarStore : Ext.create('AM.store.Calendars'),
+		readOnly : true, 
 
 		initComponent: function(){ 
 			var me = this; 

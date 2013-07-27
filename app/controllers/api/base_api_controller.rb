@@ -24,6 +24,29 @@ class Api::BaseApiController < ApplicationController
     return datetime 
   end
   
+  def parse_datetime_from_client( datetime_string)
+    date = datetime_string.split("T").first
+    time = datetime_string.split("T").last 
+    
+    date_array = date.split('-').map{|x| x.to_i}
+    time_array = time.split(':').map{|x| x.to_i}
+    
+    datetime = DateTime.new(date_array[0], date_array[1], date_array[2], 
+                                time_array[0], time_array[1], time_array[2])
+    
+
+    datetime = DateTime.new( date_array[0], 
+                              date_array[1], 
+                              date_array[2], 
+                              time_array[0], 
+                              time_array[1], 
+                              time_array[2],
+                  Rational( UTC_OFFSET , 24) )
+                  
+                  
+    return datetime.utc
+  end
+  
   def extract_date( date ) 
     if date.nil? or date.length == 0 
       return nil 
