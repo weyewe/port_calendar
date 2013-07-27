@@ -1,6 +1,7 @@
 class Api::BookingsController < Api::BaseApiController
   
   def index
+    # sleep 5
     if params[:livesearch].present? 
       livesearch = "%#{params[:livesearch]}%"
       @objects = Booking.where{

@@ -1,5 +1,9 @@
+// strategy: before load, setLoading = true on the calendar
+// afterLoad + all events are rendered, setLoading == false on the calendar
+
 Ext.define("AM.controller.Calendars", {
 	extend : "Ext.app.Controller",
+	stores: ['Events'],
 	views : [
 		"calendar.Basic",
 		'Viewport' 
@@ -25,12 +29,12 @@ Ext.define("AM.controller.Calendars", {
 	
 	
 	onViewportLoaded: function(){
-		console.log("onViewportLoaded");
+		// console.log("onViewportLoaded");
 		var me = this;
 		
 		var basicCal = this.getBasicCal();
-		console.log('the basicCal');
-		console.log( basicCal ) ;
+		// console.log('the basicCal');
+		// console.log( basicCal ) ;
 		
 		// basicCal.eventStore =   Ext.create('Extensible.calendar.data.MemoryEventStore', {
 		//         // defined in ../data/EventsCustom.js
@@ -42,10 +46,10 @@ Ext.define("AM.controller.Calendars", {
 	},
 	
 	addEventStoreToCalendar: function(){
-		console.log("==========>addEventStoreToCalendar ")
+		// console.log("==========>addEventStoreToCalendar ")
 		var basicCal = this.getBasicCal();
-		console.log('the basicCal');
-		console.log( basicCal ) ;
+		// console.log('the basicCal');
+		// console.log( basicCal ) ;
 		
 		basicCal.eventStore =   Ext.create('Extensible.calendar.data.MemoryEventStore', {
 		        // defined in ../data/EventsCustom.js
@@ -55,7 +59,15 @@ Ext.define("AM.controller.Calendars", {
 	},
 	
 	init : function( application ) {
+		console.log("Inside init");
 		var me = this; 
+		
+		console.log("The getEventsStore()");
+		console.log( me.getEventsStore() ) ;
+		me.getEventsStore().on({
+		    'beforeload': this.onEventsStoreBeforeLoad,
+		    scope: this
+		});
 		
 		me.control({
 		 
@@ -64,9 +76,110 @@ Ext.define("AM.controller.Calendars", {
 			} ,
 			
 			'basicCalendar' : {
-				'beforerender': this.addEventStoreToCalendar
+				'beforerender': this.addEventStoreToCalendar,
+				'viewchange' : this.alertViewChange,
+				'datechange' : this.alertDateChange,
+				'beforedatechange' : this.alertBeforeDateChange,
+				'eventsrendered' : this.alertAfterEventsRendered
 			}
 		});
+		
+		console.log("Init is finished");
 	},
+	
+	 
+	onEventsStoreBeforeLoad: function(){
+		console.log("before events store load");
+	},
+	
+	 
+	alertAfterEventsRendered: function( cPanel ){
+		console.log("After Events Rendered");
+		cPanel.setLoading = false ; 
+	},
+	alertViewChange: function(cPanel, view, object){
+		console.log("View Change")
+		cPanel.setLoading = true; 
+		var me = this; 
+		// alert("The view is changed");
+		// console.log("The alertViewChange");
+		// console.log("The cPanel");
+		// console.log( cPanel );
+		// console.log("The view");
+		// console.log(view);
+		// 
+		// console.log("The object");
+		// console.log( object); 
+		// console.log("The viewStart: ")
+		// console.log( object.viewStart); 
+		// console.log("The viewStart inspect"); 
+		// console.log(  + object.viewStart.getDate() );
+		// console.log("The year: " + object.viewStart.getYear() );
+		// console.log("The month: " + object.viewStart.getMonth()  ) ;
+		// console.log("The day: " + object.viewStart.getDay() ) ;
+		
+		viewStart = Ext.Date.format(object.viewStart, 'Y-m-d');
+		viewEnd = Ext.Date.format(object.viewEnd, 'Y-m-d');
+		// console.log("The value viewStart: " + viewStart);
+		
+		
+		// load : function(o) {
+		//         Extensible.log('store load');
+		//         o = o || {};
+		//         
+		//         // if params are passed delete the one-time defaults
+		//         if(o.params){
+		//             delete this.initialParams;
+		//         }
+		//         // this.initialParams will only be set if the store is being loaded manually
+		//         // for the first time (autoLoad = false) so the owning calendar view set
+		//         // the initial start and end date params to use. Every load after that will
+		//         // have these params set automatically during normal UI navigation.
+		//         if(this.initialParams){
+		//             o.params = o.params || {};
+		//             Ext.apply(o.params, this.initialParams);
+		//             delete this.initialParams;
+		//         }
+		//         
+		//         this.callParent(arguments);
+		//     }
+		// 
+		// 
+		// me.getEventsStore().getProxy().extraParams = {
+		//     startDate: viewStart,
+		// 		endDate : viewEnd
+		// };
+	 
+		// me.getEventsStore().load({
+		//     startDate: viewStart,
+		// 		endDate : viewEnd
+		// });
+		
+		// me.getEventsStore().load(); 
+		
+		// if( view.reloadStore ){
+		// 	view.reloadStore(); 
+		// }
+		
+	},
+	
+	// ( Extensible.calendar.CalendarPanel this, Date startDate, Date viewStart, Date viewEnd )
+	alertDateChange: function(cPanel, startDate, viewStart, viewEnd ){
+		// alert("The date is changed")
+		// console.log("The dateChange");
+		// console.log(startDate);
+		// console.log(viewStart);
+		// console.log( viewEnd);
+	},
+	
+	// beforedatechange : ( Extensible.calendar.CalendarPanel this, Date startDate, Date newStartDate, Date viewStart, Date viewEnd )
+	
+	alertBeforeDateChange: function(cPanel, startDate, newStartDate, viewStart, viewEnd){
+		// console.log("The alertBeforeDateChange");
+		// console.log(startDate);
+		// console.log( newStartDate);
+		// console.log(viewStart);
+		// console.log( viewEnd);
+	}
   
 });
