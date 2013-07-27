@@ -11,13 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130726011840) do
+ActiveRecord::Schema.define(version: 20130726094410) do
 
   create_table "bookings", force: true do |t|
     t.datetime "start_datetime"
     t.datetime "end_datetime"
     t.string   "title"
     t.string   "calendar_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "calendars", force: true do |t|
+    t.string   "title"
+    t.text     "description"
+    t.integer  "color"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

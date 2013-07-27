@@ -16,8 +16,12 @@ class Api::BaseApiController < ApplicationController
   def extract_extensible_date(date_string)# 2013-06-30
     date_array = date_string.split('-').map{|x| x.to_i}
     
-    date = Date.new( date_array[0], date_array[1], date_array[2])
-    return date.to_datetime
+    # date = Date.new( date_array[0], date_array[1], date_array[2])
+    # return date.to_datetime
+    
+    datetime = DateTime.new(date_array[0], date_array[1], date_array[2], 0 ,0 ,0) 
+    puts "inside extraction.. the datetime: #{datetime}"
+    return datetime 
   end
   
   def extract_date( date ) 

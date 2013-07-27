@@ -1,9 +1,9 @@
-class Api::BookingsController < Api::BaseApiController
+class Api::CalendarsController < Api::BaseApiController
   
   def index
     if params[:livesearch].present? 
       livesearch = "%#{params[:livesearch]}%"
-      @objects = Booking.where{
+      @objects = Calendar.where{
         (is_deleted.eq false) & 
         (
           (name =~  livesearch )
@@ -11,45 +11,33 @@ class Api::BookingsController < Api::BaseApiController
         
       }.page(params[:page]).per(params[:limit]).order("id DESC")
       
-      @total = Booking.where{
+      @total = Calendar.where{
         (is_deleted.eq false) & 
         (
           (name =~  livesearch )
         )
       }.count
-    elsif params[:startDate].present? 
-      puts "This is the shite\n"*5
-      
-      # 2013-06-30
-      startDate = extract_extensible_date( params[:startDate])
-      endDate = ( extract_extensible_date(params[:endDate]) + 1.day ).to_date.to_datetime
-      puts "The class : #{startDate.class.to_s}"
-      puts "The startDate: #{startDate.year}, #{startDate.month}, #{startDate.day}"
-      puts "The endDate : #{endDate.year}, #{endDate.month}, #{endDate.day}"
-      
-      puts "startDate: #{startDate}"
-      puts "endDate : #{endDate}"
-      puts "startDate.to_time : #{startDate.to_time.to_s}"
-      puts "endDate.to_time : #{endDate.to_time.to_s}"
-      
-      @objects = Booking.bookings_in_between(startDate, endDate)
+    
+    elsif params[:page].present?
+      @objects = Calendar.active_objects.page(params[:page]).per(params[:limit]).order("id DESC")
+      @total = Calendar.active_objects.count
+    else 
+      @objects = Calendar.all
       @total = @objects.count 
-      puts "Total count: #{@total}"
-    else
-      @objects = Booking.active_objects.page(params[:page]).per(params[:limit]).order("id DESC")
-      @total = Booking.active_objects.count
     end
     
-    # render :json => { :bookings => @objects , :total => @total , :success => true }
+    
+    
+    render :json => { :calendars => @objects , :total => @total , :success => true }
   end
 
   def create
-    @object = Booking.new(params[:employee])
+    @object = Calendar.new(params[:employee])
  
     if @object.save
       render :json => { :success => true, 
                         :employees => [@object] , 
-                        :total => Booking.active_objects.count }  
+                        :total => Calendar.active_objects.count }  
     else
       msg = {
         :success => false, 
@@ -66,19 +54,19 @@ class Api::BookingsController < Api::BaseApiController
   end
   
   def show
-    @object  = Booking.find params[:id]
+    @object  = Calendar.find params[:id]
     render :json => { :success => true,   
                       :employee => @object,
-                      :total => Booking.active_objects.count  }
+                      :total => Calendar.active_objects.count  }
   end
 
   def update
-    @object = Booking.find(params[:id])
+    @object = Calendar.find(params[:id])
     
     if @object.update_attributes(params[:employee])
       render :json => { :success => true,   
                         :employees => [@object],
-                        :total => Booking.active_objects.count  } 
+                        :total => Calendar.active_objects.count  } 
     else
       msg = {
         :success => false, 
@@ -94,13 +82,13 @@ class Api::BookingsController < Api::BaseApiController
   end
 
   def destroy
-    @object = Booking.find(params[:id])
+    @object = Calendar.find(params[:id])
     @object.delete_object
 
     if @object.is_deleted
-      render :json => { :success => true, :total => Booking.active_objects.count }  
+      render :json => { :success => true, :total => Calendar.active_objects.count }  
     else
-      render :json => { :success => false, :total => Booking.active_objects.count }  
+      render :json => { :success => false, :total => Calendar.active_objects.count }  
     end
   end
   
@@ -115,14 +103,14 @@ class Api::BookingsController < Api::BaseApiController
     # on PostGre SQL, it is ignoring lower case or upper case 
     
     if  selected_id.nil?  
-      @objects = Booking.where{  (name =~ query)   & 
+      @objects = Calendar.where{  (name =~ query)   & 
                                 (is_deleted.eq false )
                               }.
                         page(params[:page]).
                         per(params[:limit]).
                         order("id DESC")
     else
-      @objects = Booking.where{ (id.eq selected_id)  & 
+      @objects = Calendar.where{ (id.eq selected_id)  & 
                                 (is_deleted.eq false )
                               }.
                         page(params[:page]).

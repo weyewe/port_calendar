@@ -3,6 +3,7 @@ PortCalendar::Application.routes.draw do
    
    namespace :api do 
      resources :bookings 
+     resources :calendars 
    end
 end
 

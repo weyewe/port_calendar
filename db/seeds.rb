@@ -6,7 +6,7 @@ def make_date(*args)
   m = (args[2] || 0)  
   s = (args[3] || 0)  
   
-  return now  + d.days + h.hours + m.minutes + s.seconds   
+  return ( now  + d.days + h.hours + m.minutes + s.seconds   ) .new_offset( Rational(0,24) ) 
 end
 
 
