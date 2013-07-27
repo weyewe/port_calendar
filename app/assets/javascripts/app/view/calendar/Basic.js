@@ -22,7 +22,8 @@ Ext.define('AM.view.calendar.Basic', {
 								console.log("*********** awesome inside eventStore load callback");
 			 					console.log("The event store loaded");
 								var viewport = Ext.ComponentQuery.query('viewport')[0];
-								viewport.setLoading( false ) ;
+								// viewport.setLoading( false ) ;
+								viewport.fireEvent("eventsStoreLoaded");
 			 					console.log(resultObject );
 								console.log("after the calendar");
 			 					// me.setLoading( true ); 
@@ -32,7 +33,8 @@ Ext.define('AM.view.calendar.Basic', {
 			 					console.log(calendar ) ;
 			 					// me.setLoading(false); 
 								var viewport = Ext.ComponentQuery.query('viewport')[0];
-								viewport.setLoading( true ) ;
+								// viewport.setLoading( true ) ;
+								viewport.fireEvent("beforeEventsStoreLoad");
 			 				});
 			
 			

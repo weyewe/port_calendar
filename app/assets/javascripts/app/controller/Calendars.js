@@ -62,17 +62,19 @@ Ext.define("AM.controller.Calendars", {
 		console.log("Inside init");
 		var me = this; 
 		
-		console.log("The getEventsStore()");
-		console.log( me.getEventsStore() ) ;
-		me.getEventsStore().on({
-		    'beforeload': this.onEventsStoreBeforeLoad,
-		    scope: this
-		});
+		// console.log("The getEventsStore()");
+		// console.log( me.getEventsStore() ) ;
+		// me.getEventsStore().on({
+		//     'beforeload': this.onEventsStoreBeforeLoad,
+		//     scope: this
+		// });
 		
 		me.control({
 		 
 			'vp' : {
-				'render' : this.onViewportLoaded
+				'render' : this.onViewportLoaded,
+				'eventsStoreLoaded' : this.onEventsStoreLoaded,
+				'beforeEventsStoreLoad' : this.beforeEventsStoreLoaded
 			} ,
 			
 			'basicCalendar' : {
@@ -87,11 +89,15 @@ Ext.define("AM.controller.Calendars", {
 		console.log("Init is finished");
 	},
 	
-	 
-	onEventsStoreBeforeLoad: function(){
-		console.log("before events store load");
+	onEventsStoreLoaded : function(sender){  
+		var me = this;
+		me.getViewport().setLoading(false);
 	},
 	
+	beforeEventsStoreLoaded: function(sender){ 
+		var me = this;
+		me.getViewport().setLoading(true);
+	},
 	 
 	alertAfterEventsRendered: function( cPanel ){
 		console.log("After Events Rendered");

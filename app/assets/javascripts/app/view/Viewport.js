@@ -12,7 +12,8 @@ Ext.define("AM.view.Viewport" , {
 		{
 			html : "First",
 			xtype : 'panel',
-			flex : 1 
+			flex : 1,
+			id : 'indicator'
 		}, 
 		
 		{
