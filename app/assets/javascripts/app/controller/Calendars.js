@@ -85,12 +85,22 @@ Ext.define("AM.controller.Calendars", {
 				'eventsrendered' : this.alertAfterEventsRendered,
 				'dayclick' : this.onDayClick, 
 				'eventclick' : this.onEventClick
+			},
+			'vp datepicker' : {
+				'select': this.onDatePickerSelected 
 			}
+			
 		});
 		
 		console.log("Init is finished");
 	},
-
+	
+	
+	onDatePickerSelected: function(dp, dt){
+			var basicCal = this.getBasicCal();
+			basicCal.setStartDate(dt); 
+  },
+ 
 	onDayClick: function(){
 		console.log("On day click");
 	},

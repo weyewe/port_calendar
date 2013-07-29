@@ -17,11 +17,27 @@ Ext.define("AM.view.Viewport" , {
 		}, 
 		
 		{
-			xtype: 'basicCalendar', 
-			flex: 5 
-		},
+			xtype : 'panel',
+			flex :  5, 
+			layout : {
+				type : 'hbox',
+				align : 'stretch'
+			},
+			items : [
+				{
+					flex : 1,
+					xtype: 'datepicker' 
+				},
+				{
+					xtype: 'basicCalendar', 
+					flex: 5 
+				}
+			]
+		}
+		
 		// {
-		// 	xtype : 'basicCalendar'
-		// }
+		// 	xtype: 'basicCalendar', 
+		// 	flex: 5 
+		// } 
 	]
 });
