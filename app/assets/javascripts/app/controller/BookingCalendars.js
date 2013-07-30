@@ -52,6 +52,7 @@ Ext.define("AM.controller.BookingCalendars", {
 			
 			'bookingCalendar facilityList' : {
 				'click' : this.onFacilityListClicked,
+				'render' : this.onFacilityListRendered
 				// 'datechange' : this.alertDateChange,
 				// 'beforedatechange' : this.alertBeforeDateChange,
 				// 'eventsrendered' : this.alertAfterEventsRendered,
@@ -72,6 +73,14 @@ Ext.define("AM.controller.BookingCalendars", {
 	onLaunch : function(){
 	 
 		
+	},
+	
+	onFacilityListRendered: function(){
+		console.log("Facility list is rendred");
+		var fList = Ext.ComponentQuery.query("facilityList")[0]
+	
+			
+		fList.store.reload()  // => do this, and it will auto refresh itself.
 	},
 	
 	
@@ -97,6 +106,24 @@ Ext.define("AM.controller.BookingCalendars", {
 		// var calList = this.getCalendarList()  ;
 		// console.log("THe calendar LIST ");
 		// console.log( calList ) ;
+		
+		
+		// var fList = Ext.ComponentQuery.query("facilityList")[0]
+			// // Case: autoLoad : true 
+			// There is something inside fList.body 
+			// fList.body
+			// constructor {dom: div#facilityList-1013-body.x-panel-body x-panel-body-default x-panel-body-default x-layout-fit, 
+			// 		id: "facilityList-1013-body", $cache: Object, lastBox: Object, self: function…}
+			// 	
+			
+			// // Case autoLoad : false
+			// There is something inside fList.body
+			// constructor {dom: div#facilityList-1013-body.x-panel-body x-panel-body-default 
+			// 	x-panel-body-default x-layout-fit, id: "facilityList-1013-body",
+			//  	$cache: Object, lastBox: Object, self: function…}
+			
+		// fList.store.reload()  => do this, and it will auto refresh itself. 
+		
 	},
 	
 	

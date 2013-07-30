@@ -29,7 +29,7 @@ Ext.define('AM.store.Calendars', {
 			extend: 'Ext.data.Store',
 			id: "calendar-store", 
 			
-	    autoLoad: true,
+	    autoLoad: false,
 	
 			// idProperty: 'calendar_id' ,
 			
