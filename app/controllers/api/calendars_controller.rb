@@ -1,34 +1,32 @@
 class Api::CalendarsController < Api::BaseApiController
   
   def index
-    if params[:livesearch].present? 
-      livesearch = "%#{params[:livesearch]}%"
-      @objects = Calendar.where{
-        (is_deleted.eq false) & 
-        (
-          (name =~  livesearch )
-        )
-        
-      }.page(params[:page]).per(params[:limit]).order("id DESC")
-      
-      @total = Calendar.where{
-        (is_deleted.eq false) & 
-        (
-          (name =~  livesearch )
-        )
-      }.count
-    
-    elsif params[:page].present?
-      @objects = Calendar.active_objects.page(params[:page]).per(params[:limit]).order("id DESC")
-      @total = Calendar.active_objects.count
-    else 
-      @objects = Calendar.all
-      @total = @objects.count 
-    end
-    
-    
-    
-    render :json => { :calendars => @objects , :total => @total , :success => true }
+     
+     @objects = [{
+         "cal_id"    => "C1",
+         "cal_title" => "Home",
+         "cal_color" => 2
+     },{
+         "cal_id"    => "C2",
+         "cal_title" => "Work",
+         "cal_color" => 22
+     },{
+         "cal_id"    => "C3",
+         "cal_title" => "School",
+         "cal_color" => 7
+     },{
+         "cal_id"    => "C4",
+         "cal_title" => "Sports",
+         "cal_color" => 26
+     }]
+     
+     # {
+     #      "cal_id"    :"C8",
+     #      "cal_title" :"Manga",
+     #      "cal_color" :26
+     #  }
+     
+     @total = @objects.length
   end
 
   def create

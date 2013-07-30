@@ -64,7 +64,7 @@ Ext.define("AM.controller.BookingCalendars", {
 			
 		});
 		
-		console.log("Init is finished");
+		// console.log("Init is finished");
 	},
 	
 	
@@ -76,7 +76,7 @@ Ext.define("AM.controller.BookingCalendars", {
 	
 	
 	onViewportLoaded: function(){
-		console.log("THE VIEWPORT IS LOADED");
+		// console.log("THE VIEWPORT IS LOADED");
 		// this.getCalendarPanel().store.load(); 
 		// var calPanel = this.getCalendarPanel
 		
@@ -86,14 +86,23 @@ Ext.define("AM.controller.BookingCalendars", {
 		
 		// check whether there is facility list
 		var fList = this.getCalendarList();
-		console.log("**************+++++++++ -> The calendarLIST");
-		console.log( fList ) ;
+		// console.log("**************+++++++++ -> The calendarLIST");
+		// console.log( fList ) ;
+		
+		
+		// console.log("Before reloading calendar store")
+		// var calendarStore = this.getCalendarsStore();
+		// console.log(calendarStore);
+		// calendarStore.reload();
+		// var calList = this.getCalendarList()  ;
+		// console.log("THe calendar LIST ");
+		// console.log( calList ) ;
 	},
 	
 	
 	onFacilityListClicked: function(el){
-		console.log("Facility list is clicked");
-		console.log(el);
+		// console.log("Facility list is clicked");
+		// console.log(el);
 	},
 	
 	
@@ -103,11 +112,11 @@ Ext.define("AM.controller.BookingCalendars", {
   },
  
 	onDayClick: function(){
-		console.log("On day click");
+		// console.log("On day click");
 	},
 	
 	onEventClick : function(){
-		console.log("on event click");
+		// console.log("on event click");
 	},
 	
 	
@@ -124,11 +133,11 @@ Ext.define("AM.controller.BookingCalendars", {
 	},
 	 
 	alertAfterEventsRendered: function( cPanel ){
-		console.log("After Events Rendered");
+		// console.log("After Events Rendered");
 		cPanel.setLoading = false ; 
 	},
 	alertViewChange: function(cPanel, view, object){
-		console.log("[calendarPanel] View Change");
+		// console.log("[calendarPanel] View Change");
 		// alert("THe view change");
 		// cPanel.setLoading = true; 
 		// var me = this; 

@@ -24,38 +24,6 @@ Ext.define('AM.store.Events', {
 			idProperty: 'id' ,
 			
 			
-			// proxy: this.eventProxy,
-			
-			// this.eventProxy = Ext.create("Ext.data.proxy.Ajax", {
-			//           noCache: false,
-			//           model: "Extensible.calendar.data.EventModel",
-			//           api: {
-			//               read: b.apiRoot + "read/key/" + b.appKey,
-			//               create: b.apiRoot + "create/key/" + b.appKey,
-			//               update: b.apiRoot + "update/key/" + b.appKey,
-			//               destroy: b.apiRoot + "destroy/key/" + b.appKey
-			//           },
-			//           reader: {
-			//               type: "json",
-			//               root: "data"
-			//           },
-			//           writer: {
-			//               type: "json",
-			//               nameProperty: "mapping"
-			//           },
-			//           pageParam: undefined,
-			//           startParam: undefined,
-			//           limitParam: undefined,
-			//           listeners: {
-			//               exception: function (k, j, m, c) {
-			//                   var l = j.message ? j.message : Ext.decode(j.responseText).message;
-			//                   Ext.Msg.alert("Server Error", l)
-			//               }
-			//           }
-			//       });
-			// 
-
-			
 			
 			proxy: {
 				url: 'api/bookings',
