@@ -19,7 +19,7 @@ Ext.define('AM.store.Events', {
 			extend: 'Extensible.calendar.data.EventStore',
 			id: "event-store", 
 			
-	    autoLoad: true,
+	    autoLoad: false,
 	
 			idProperty: 'id' ,
 			

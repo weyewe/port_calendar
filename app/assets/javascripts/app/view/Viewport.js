@@ -16,28 +16,35 @@ Ext.define("AM.view.Viewport" , {
 			id : 'indicator'
 		}, 
 		
+		// {
+		// 	xtype: 'extensible.calendarlist',
+		//       store: Ext.create('AM.store.Calendars')
+		// },
+		
+		
 		{
-			xtype : 'panel',
-			flex :  5, 
-			layout : {
-				type : 'hbox',
-				align : 'stretch'
-			},
-			items : [
-				{
-					flex : 1,
-					xtype: 'datepicker' 
-				},
-				{
-					xtype: 'basicCalendar', 
-					flex: 5 
-				}
-			]
+			xtype : 'bookingCalendar',
+			flex : 5 
 		}
 		
 		// {
-		// 	xtype: 'basicCalendar', 
-		// 	flex: 5 
-		// } 
+		// 	xtype : 'panel',
+		// 	flex :  5, 
+		// 	layout : {
+		// 		type : 'hbox',
+		// 		align : 'stretch'
+		// 	},
+		// 	items : [
+		// 		{
+		// 			flex : 1,
+		// 			xtype: 'datepicker' 
+		// 		},
+		// 		
+		// 		{
+		// 			xtype: 'basicCalendar', 
+		// 			flex: 5 
+		// 		}
+		// 	]
+		// }
 	]
 });

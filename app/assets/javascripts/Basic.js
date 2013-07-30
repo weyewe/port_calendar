@@ -2,16 +2,21 @@ Ext.define('AM.view.calendar.Basic', {
     extend: 'Extensible.calendar.CalendarPanel',
 		alias : 'widget.basicCalendar',
     title: 'Basic  Haha Calendar' , 
-		readOnly : true, 
+		readOnly : false, 
 
 		initComponent: function(){ 
+			
+			
+			
 			var me = this; 
 			var calendar = this;  
 			
 			me.createEventStore();
 			me.createCalendarStore(); 
-			this.callParent( arguments );
 			
+			
+			
+			this.callParent( arguments );
 		},
 		
 		

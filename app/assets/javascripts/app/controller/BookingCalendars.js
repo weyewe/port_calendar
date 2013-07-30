@@ -1,11 +1,13 @@
 // strategy: before load, setLoading = true on the calendar
 // afterLoad + all events are rendered, setLoading == false on the calendar
 
-Ext.define("AM.controller.Calendars", {
+Ext.define("AM.controller.BookingCalendars", {
 	extend : "Ext.app.Controller",
-	stores: ['Events'],
+	stores: ['Events', 'Calendars'],
 	views : [
-		"calendar.Basic",
+		"BookingCalendar",
+		'calendar.BookingCalendarPanel',
+		'calendar.FacilityList',
 		'Viewport' 
 	],
 	 
@@ -16,77 +18,47 @@ Ext.define("AM.controller.Calendars", {
 			selector: 'vp'
 		} ,
 		{
-			ref : 'basicCal',
-			selector : 'basicCalendar'
+			ref : 'calendarPanel',
+			selector : 'bookingCalendar bookingCalendarPanel'
+		},
+		{
+			ref : 'calendarList',
+			selector : 'bookingCalendar facilityList'
 		}
 	],
 	
  
-	onLaunch : function(){
+	
 	 
-		
-	},
-	
-	
-	onViewportLoaded: function(){
-		// console.log("onViewportLoaded");
-		var me = this;
-		
-		var basicCal = this.getBasicCal();
-		// console.log('the basicCal');
-		// console.log( basicCal ) ;
-		
-		// basicCal.eventStore =   Ext.create('Extensible.calendar.data.MemoryEventStore', {
-		//         // defined in ../data/EventsCustom.js
-		//         // data:Extensible.example.calendar.data.EventsCustom.getData() // Ext.create('Extensible.example.calendar.data.EventsCustom')
-		//     data:Extensible.calendar.data.Events.getData() 
-		// });
-			
-			
-	},
-	
-	addEventStoreToCalendar: function(){
-		// console.log("==========>addEventStoreToCalendar ")
-		var basicCal = this.getBasicCal();
-		// console.log('the basicCal');
-		// console.log( basicCal ) ;
-		
-		basicCal.eventStore =   Ext.create('Extensible.calendar.data.MemoryEventStore', {
-		        // defined in ../data/EventsCustom.js
-		        // data:Extensible.example.calendar.data.EventsCustom.getData() // Ext.create('Extensible.example.calendar.data.EventsCustom')
-		    data:Extensible.calendar.data.Events.getData() 
-		});
-	},
 	
 	init : function( application ) {
-		console.log("Inside init");
 		var me = this; 
-		
-		// console.log("The getEventsStore()");
-		// console.log( me.getEventsStore() ) ;
-		// me.getEventsStore().on({
-		//     'beforeload': this.onEventsStoreBeforeLoad,
-		//     scope: this
-		// });
-		
 		me.control({
 		 
-			'vp' : {
+			'viewport' : {
 				'render' : this.onViewportLoaded,
 				'eventsStoreLoaded' : this.onEventsStoreLoaded,
 				'beforeEventsStoreLoad' : this.beforeEventsStoreLoaded
 			} ,
 			
-			'basicCalendar' : {
-				'beforerender': this.addEventStoreToCalendar,
+			'bookingCalendar bookingCalendarPanel' : {
 				'viewchange' : this.alertViewChange,
-				'datechange' : this.alertDateChange,
-				'beforedatechange' : this.alertBeforeDateChange,
-				'eventsrendered' : this.alertAfterEventsRendered,
-				'dayclick' : this.onDayClick, 
-				'eventclick' : this.onEventClick
+				// 'datechange' : this.alertDateChange,
+				// 'beforedatechange' : this.alertBeforeDateChange,
+				// 'eventsrendered' : this.alertAfterEventsRendered,
+				// 'dayclick' : this.onDayClick, 
+				// 'eventclick' : this.onEventClick
 			},
-			'vp datepicker' : {
+			
+			'bookingCalendar facilityList' : {
+				'click' : this.onFacilityListClicked,
+				// 'datechange' : this.alertDateChange,
+				// 'beforedatechange' : this.alertBeforeDateChange,
+				// 'eventsrendered' : this.alertAfterEventsRendered,
+				// 'dayclick' : this.onDayClick, 
+				// 'eventclick' : this.onEventClick
+			},
+			'bookingCalendar datepicker' : {
 				'select': this.onDatePickerSelected 
 			}
 			
@@ -96,9 +68,38 @@ Ext.define("AM.controller.Calendars", {
 	},
 	
 	
+	
+	onLaunch : function(){
+	 
+		
+	},
+	
+	
+	onViewportLoaded: function(){
+		console.log("THE VIEWPORT IS LOADED");
+		// this.getCalendarPanel().store.load(); 
+		// var calPanel = this.getCalendarPanel
+		
+		// load the first page from the server 
+		var calPanel  = this.getCalendarPanel(); 
+		calPanel.getActiveView().reloadStore(); 
+		
+		// check whether there is facility list
+		var fList = this.getCalendarList();
+		console.log("**************+++++++++ -> The calendarLIST");
+		console.log( fList ) ;
+	},
+	
+	
+	onFacilityListClicked: function(el){
+		console.log("Facility list is clicked");
+		console.log(el);
+	},
+	
+	
 	onDatePickerSelected: function(dp, dt){
-			var basicCal = this.getBasicCal();
-			basicCal.setStartDate(dt); 
+			var calendarPanel = this.getCalendarPanel();
+			calendarPanel.setStartDate(dt); 
   },
  
 	onDayClick: function(){
@@ -127,9 +128,10 @@ Ext.define("AM.controller.Calendars", {
 		cPanel.setLoading = false ; 
 	},
 	alertViewChange: function(cPanel, view, object){
-		console.log("View Change")
-		cPanel.setLoading = true; 
-		var me = this; 
+		console.log("[calendarPanel] View Change");
+		// alert("THe view change");
+		// cPanel.setLoading = true; 
+		// var me = this; 
 		// alert("The view is changed");
 		// console.log("The alertViewChange");
 		// console.log("The cPanel");
@@ -147,8 +149,8 @@ Ext.define("AM.controller.Calendars", {
 		// console.log("The month: " + object.viewStart.getMonth()  ) ;
 		// console.log("The day: " + object.viewStart.getDay() ) ;
 		
-		viewStart = Ext.Date.format(object.viewStart, 'Y-m-d');
-		viewEnd = Ext.Date.format(object.viewEnd, 'Y-m-d');
+		// viewStart = Ext.Date.format(object.viewStart, 'Y-m-d');
+		// viewEnd = Ext.Date.format(object.viewEnd, 'Y-m-d');
 		// console.log("The value viewStart: " + viewStart);
 		
 		

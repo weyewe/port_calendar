@@ -1,12 +1,13 @@
 // strategy: before load, setLoading = true on the calendar
 // afterLoad + all events are rendered, setLoading == false on the calendar
 
-Ext.define("AM.controller.Calendars", {
+Ext.define("AM.controller.BasicCalendarWrappers", {
 	extend : "Ext.app.Controller",
 	stores: ['Events'],
 	views : [
-		"calendar.Basic",
-		'Viewport' 
+		"calendar.BasicCalendarWrapper",
+		'Viewport'  
+		
 	],
 	 
 	
@@ -17,82 +18,89 @@ Ext.define("AM.controller.Calendars", {
 		} ,
 		{
 			ref : 'basicCal',
-			selector : 'basicCalendar'
-		}
-	],
-	
- 
-	onLaunch : function(){
-	 
+			selector : 'basicCalendarWrapper'
+		},
 		
-	},
-	
-	
-	onViewportLoaded: function(){
-	},
-	
-	addEventStoreToCalendar: function(){ 
-	},
-	
+		{
+			ref : 'theCalendarPanel',
+			selector : 'basicCalendarWrapper extensible.calendarpanel'
+		},
+		
+		{
+			ref : 'theDatePicker',
+			selector : 'basicCalendarWrapper datepicker'
+		},
+		
+		
+	],
+	 
+	 
 	init : function( application ) {
+		console.log("[INIT Controller]");
+		
+		console.log("The constant's content is : " + AM.view.Constants['moron'] ) ;
 		var me = this; 
 		me.control({
 		 
 			'vp' : {
 				'render' : this.onViewportLoaded,
-				'eventsStoreLoaded' : this.onEventsStoreLoaded,
-				'beforeEventsStoreLoad' : this.beforeEventsStoreLoaded
+				// 'eventsStoreLoaded' : this.onEventsStoreLoaded,
+				// 'beforeEventsStoreLoad' : this.beforeEventsStoreLoaded
 			} ,
 			
-			'basicCalendar' : {
-				'beforerender': this.addEventStoreToCalendar,
-				'viewchange' : this.alertViewChange,
-				'datechange' : this.alertDateChange,
-				'beforedatechange' : this.alertBeforeDateChange,
-				'eventsrendered' : this.alertAfterEventsRendered,
+			
+			// all these shite doesn't work for extensibleCalendarPanel since it is 
+			// not initialized during this control definition.
+			'extensibleCalendarPanel' : {
+				// 'beforerender': this.addEventStoreToCalendar,
+				// 'viewchange' : this.alertViewChange,
+				// 'datechange' : this.alertDateChange,
+				// 'beforedatechange' : this.alertBeforeDateChange,
+				// 'eventsrendered' : this.alertAfterEventsRendered,
 				// 'dayclick' : this.onDayClick, 
-				'eventclick' : this.onEventClick
+				// 'eventclick' : this.onEventClick
 			},
-			'vp datepicker' : {
+			'basicCalendarWrapper datepicker' : {
 				'select': this.onDatePickerSelected 
 			}
 			
 		});
 		
-		console.log("Init is finished");
+		console.log("[init controller] Init is finished");
 	},
 	
+	onViewportLoaded: function(){
+		console.log("============> The onViewportLoaded is not working");
+		var datepicker = this.getTheDatePicker();
+		console.log("The datepicker: " + datepicker);
+		
+		var calendarPanel = this.getTheCalendarPanel();
+		console.log("The calendar Panel: " + calendarPanel);
+		
+		console.log("The calendar wrapper");
+		var basicCal = this.getBasicCal(); 
+		console.log(basicCal);
+		
+		
+		// Ext.ComponentQuery.query("basicCalendarWrapper extensible.calendarpanel")
+		
+		// Ext.ComponentQuery.query("extensible.calendarpanel")
+		// Ext.ComponentQuery.query("extensibleCalendarPanel")
+		
+		// Ext.ComponentQuery.query("extensible.calendarlist") 
+		
+		
+		
+	 
+	},
 	
 	onDatePickerSelected: function(dp, dt){
-			var basicCal = this.getBasicCal();
-			basicCal.setStartDate(dt); 
+		console.log("On date picker selected");
+		// Ext.getCmp only works by ID 
+		var calPanel = Ext.getCmp("extensibleCalendarPanel");
+		calPanel.setStartDate(dt); 
   },
- 
-	onDayClick: function(){
-		console.log("On day click");
-	},
-	
-	onEventClick : function(){
-		console.log("on event click");
-	},
-	
-	
-	onEventsStoreLoaded : function(sender){  
-		var me = this;
-		// Ext.getCmp('indicator').setLoading(false);
-		me.getViewport().setLoading(false);
-	},
-	
-	beforeEventsStoreLoaded: function(sender){ 
-		var me = this;
-		// Ext.getCmp('indicator').setLoading(true);
-		me.getViewport().setLoading(true);
-	},
-	 
-	alertAfterEventsRendered: function( cPanel ){
-		console.log("After Events Rendered");
-		cPanel.setLoading = false ; 
-	},
+  
 	alertViewChange: function(cPanel, view, object){
 		console.log("View Change")
 		cPanel.setLoading = true; 
@@ -159,23 +167,6 @@ Ext.define("AM.controller.Calendars", {
 		
 	},
 	
-	// ( Extensible.calendar.CalendarPanel this, Date startDate, Date viewStart, Date viewEnd )
-	alertDateChange: function(cPanel, startDate, viewStart, viewEnd ){
-		// alert("The date is changed")
-		// console.log("The dateChange");
-		// console.log(startDate);
-		// console.log(viewStart);
-		// console.log( viewEnd);
-	},
-	
-	// beforedatechange : ( Extensible.calendar.CalendarPanel this, Date startDate, Date newStartDate, Date viewStart, Date viewEnd )
-	
-	alertBeforeDateChange: function(cPanel, startDate, newStartDate, viewStart, viewEnd){
-		// console.log("The alertBeforeDateChange");
-		// console.log(startDate);
-		// console.log( newStartDate);
-		// console.log(viewStart);
-		// console.log( viewEnd);
-	}
+ 
   
 });
